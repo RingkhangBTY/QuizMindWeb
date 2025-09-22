@@ -10,14 +10,14 @@ import java.time.LocalDateTime;
 
 @Entity @Table(name = "score_history")
 @Getter @Setter @NoArgsConstructor @AllArgsConstructor
-public class ScoreHistory {
+public class ScoreHistoryTable {
 
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int score_id;
     //🔹 Foreign Key -> user_details(id)
     @ManyToOne
     @JoinColumn(name = "s_user_id", nullable = false)
-    private UserDetails userDetails;
+    private UserDetailsTable userDetails;
 
     private int total_question;
     private int correct_ans;

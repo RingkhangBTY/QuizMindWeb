@@ -1,0 +1,47 @@
+[
+    {
+      "question": "Which of the following statements about method overriding in Java is true?",
+      "optionA": "It allows a subclass to provide a specific implementation of a method that is already provided by its superclass.",
+      "optionB": "It is an example of compile-time polymorphism.",
+      "optionC": "The return type of the overriding method must be strictly the same as the overridden method, never a covariant return type.",
+      "optionD": "It can be applied to static methods, allowing them to be overridden for specific subclass behavior.",
+      "answer": "It allows a subclass to provide a specific implementation of a method that is already provided by its superclass.",
+      "explanation": "Method overriding is a core concept of runtime (dynamic) polymorphism where a subclass provides its own specific implementation for a method already defined in its superclass. Option B is incorrect because overriding is runtime polymorphism. Option C is incorrect because Java supports covariant return types for overriding methods (since Java 5). Option D is incorrect because static methods cannot be overridden; they are 'hidden' but not overridden."
+    },
+    {
+      "question": "In Java, how is the principle of encapsulation primarily achieved?",
+      "optionA": "By using the `extends` keyword to create hierarchies between classes.",
+      "optionB": "By making all class members `public` to ensure global accessibility.",
+      "optionC": "By declaring instance variables as `private` and providing `public` getter and setter methods.",
+      "optionD": "By defining multiple methods with the same name but different parameter lists within a single class.",
+      "answer": "By declaring instance variables as `private` and providing `public` getter and setter methods.",
+      "explanation": "Encapsulation is the bundling of data (instance variables) and methods that operate on the data into a single unit (class), and restricting direct access to some of the object's components. This is primarily achieved by making instance variables `private` to prevent direct external access and providing controlled access through `public` getter and setter methods. Option A describes inheritance. Option B violates encapsulation. Option D describes method overloading, a form of compile-time polymorphism."
+    },
+    {
+      "question": "Consider a Java class `Child` that extends `Parent`. If the `Parent` class has a constructor that takes an `int` argument and *no* default (no-argument) constructor, what must be true for the `Child` class's constructor?",
+      "optionA": "The `Child` class does not need to explicitly call any `Parent` constructor.",
+      "optionB": "The `Child` class's constructor must explicitly call `super()` without arguments.",
+      "optionC": "The `Child` class's constructor must explicitly call `super(someIntArgument)` as its first statement.",
+      "optionD": "The `Child` class cannot be instantiated because the `Parent` lacks a default constructor.",
+      "answer": "The `Child` class's constructor must explicitly call `super(someIntArgument)` as its first statement.",
+      "explanation": "In Java, every subclass constructor must implicitly or explicitly invoke a superclass constructor. If the superclass does not have a no-argument constructor, the subclass constructor *must* explicitly call one of the superclass's available parameterized constructors using `super()` as the very first statement. Otherwise, the compiler will attempt to insert a default `super()` call, which will result in a compile-time error if no no-arg constructor exists in the superclass."
+    },
+    {
+      "question": "Which statement accurately highlights a key distinction between an abstract class and an interface in Java?",
+      "optionA": "An abstract class can have concrete methods, while an interface can only have abstract methods (prior to Java 8/9).",
+      "optionB": "A class can implement multiple interfaces but can extend only one abstract class.",
+      "optionC": "Interfaces can declare instance variables, whereas abstract classes cannot.",
+      "optionD": "An abstract class is implicitly final, preventing further subclassing.",
+      "answer": "A class can implement multiple interfaces but can extend only one abstract class.",
+      "explanation": "Java supports multiple inheritance of type (via interfaces) but restricts classes to single inheritance of implementation (a class can extend only one superclass, whether abstract or concrete). While Option A points to a historical difference, interfaces gained default and static methods in Java 8/9, making Option B a more fundamental and enduring structural distinction. Option C is incorrect; interfaces can only have `public static final` fields (constants), while abstract classes can have regular instance variables. Option D is incorrect; abstract classes are designed to be extended, not to be final."
+    },
+    {
+      "question": "Consider the following Java code snippet:\n```java\nclass Animal {\n    void sound() { System.out.println(\"Animal makes a sound\"); }\n}\nclass Dog extends Animal {\n    void sound() { System.out.println(\"Dog barks\"); }\n    void fetch() { System.out.println(\"Dog fetches\"); }\n}\npublic class Test {\n    public static void main(String[] args) {\n        Animal myAnimal = new Dog();\n        myAnimal.sound();\n        // What happens if we try to call myAnimal.fetch(); directly?\n    }\n}\n```\nWhat will be the output of `myAnimal.sound();` and what would be required to call `fetch()` on the `Dog` object referenced by `myAnimal`?",
+      "optionA": "Output: \"Animal makes a sound\"; `fetch()` can be called directly as `myAnimal.fetch();`",
+      "optionB": "Output: \"Dog barks\"; `fetch()` can be called directly as `myAnimal.fetch();`",
+      "optionC": "Output: \"Dog barks\"; `fetch()` requires downcasting: `((Dog)myAnimal).fetch();`",
+      "optionD": "Output: \"Animal makes a sound\"; `fetch()` requires downcasting: `((Dog)myAnimal).fetch();`",
+      "answer": "Output: \"Dog barks\"; `fetch()` requires downcasting: `((Dog)myAnimal).fetch();`",
+      "explanation": "When `myAnimal = new Dog();` is executed, runtime polymorphism ensures that the overridden `sound()` method from the `Dog` class is invoked, printing \"Dog barks\". However, because `myAnimal` is *declared* as `Animal`, the compiler only sees methods defined in the `Animal` class. The `fetch()` method is specific to `Dog` and is not visible through the `Animal` reference. To call `fetch()`, `myAnimal` must be explicitly cast down to a `Dog` type: `((Dog)myAnimal).fetch();`."
+    }
+  ]
