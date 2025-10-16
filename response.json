@@ -1,47 +1,38 @@
 [
     {
-      "question": "Consider a `Shape` class with a `draw()` method, and a `Circle` class that `extends` `Shape` and `overrides` `draw()`. If `Shape s = new Circle();` is executed, which `draw()` method will be invoked when `s.draw();` is called?",
-      "optionA": "The `draw()` method of the `Shape` class, as `s` is declared as `Shape`.",
-      "optionB": "The `draw()` method of the `Circle` class, determined at runtime.",
-      "optionC": "A compile-time error will occur because `Shape` cannot hold a `Circle` object.",
-      "optionD": "The `draw()` method of the `Shape` class, but only if `Shape` is an abstract class.",
-      "answer": "The `draw()` method of the `Circle` class, determined at runtime.",
-      "explanation": "This scenario demonstrates dynamic method dispatch (runtime polymorphism). The actual method invoked depends on the type of the object being referred to (an instance of `Circle`), not the type of the reference variable (`Shape`). Therefore, the overridden method in the `Circle` class will be executed."
+      "question": "Spring Boot's auto-configuration mechanism intelligently configures your application. What is the primary method Spring Boot uses to determine which auto-configurations to apply?",
+      "optionA": "It reads a predefined list of required configurations from the `pom.xml` file.",
+      "optionB": "It dynamically scans the classpath for specific starter dependencies and their associated conditional classes.",
+      "optionC": "It relies solely on the `@Configuration` classes explicitly defined by the developer.",
+      "optionD": "It inspects the environment variables at application startup to decide necessary features.",
+      "answer": "It dynamically scans the classpath for specific starter dependencies and their associated conditional classes.",
+      "explanation": "Spring Boot auto-configuration works by detecting specific classes on the classpath, often brought in by 'starter' dependencies. Based on the presence or absence of these classes, conditional annotations (like `@ConditionalOnClass`, `@ConditionalOnMissingBean`) enable or disable auto-configuration classes, rather than relying on `pom.xml` or just explicit developer configurations."
     },
     {
-      "question": "In Java, which combination of keywords *implicitly* describes all methods declared within an `interface` before Java 8's introduction of `default` and `static` methods?",
-      "optionA": "`public static`",
-      "optionB": "`protected abstract`",
-      "optionC": "`public final`",
-      "optionD": "`public abstract`",
-      "answer": "`public abstract`",
-      "explanation": "Prior to Java 8, all methods in a Java interface were implicitly `public` and `abstract`. This means they provide a contract for behavior without providing an implementation, and they must be implemented by any class that implements the interface."
+      "question": "The `@SpringBootApplication` annotation is a convenience annotation that combines several others. Which one of the following annotations is *not* a direct meta-annotation or an implicit component of `@SpringBootApplication`?",
+      "optionA": "`@Configuration`",
+      "optionB": "`@EnableAutoConfiguration`",
+      "optionC": "`@ComponentScan`",
+      "optionD": "`@EnableDiscoveryClient`",
+      "answer": "`@EnableDiscoveryClient`",
+      "explanation": "`@SpringBootApplication` is composed of `@SpringBootConfiguration` (which itself is meta-annotated with `@Configuration`), `@EnableAutoConfiguration`, and `@ComponentScan`. `@EnableDiscoveryClient` is part of Spring Cloud for service registration and discovery functionality and is not included in the core Spring Boot application annotation."
     },
     {
-      "question": "What is the primary benefit of declaring an instance variable as `private` and providing `public` getter and setter methods in Java?",
-      "optionA": "It allows direct access to the variable from any class within the same package.",
-      "optionB": "It ensures compile-time type checking for all assignments to the variable.",
-      "optionC": "It provides controlled access to the variable, allowing validation and maintaining internal consistency.",
-      "optionD": "It makes the variable accessible only through static methods of the class.",
-      "answer": "It provides controlled access to the variable, allowing validation and maintaining internal consistency.",
-      "explanation": "This practice is known as encapsulation. By making the variable `private`, its direct access is restricted. Public getter/setter methods then act as controlled gateways, allowing the class to validate input, perform necessary operations, and maintain the object's integrity before allowing data modification or retrieval. This shields the internal state from unauthorized or inconsistent modifications."
+      "question": "A Spring Boot application contains `application.properties` and `application-dev.properties` in its `src/main/resources` folder. If the application is launched without explicitly activating any Spring profile (e.g., neither `dev` nor `prod`), how will these property files be loaded and resolved?",
+      "optionA": "Only `application-dev.properties` will be loaded, as it implicitly takes precedence in development environments.",
+      "optionB": "Only `application.properties` will be loaded; `application-dev.properties` will be ignored.",
+      "optionC": "Both files will be loaded, with `application-dev.properties` overriding common properties defined in `application.properties`.",
+      "optionD": "Both files will be loaded, but only properties unique to `application-dev.properties` will be added to those from `application.properties`.",
+      "answer": "Only `application.properties` will be loaded; `application-dev.properties` will be ignored.",
+      "explanation": "By default, `application.properties` (or `application.yaml`) is always loaded. Profile-specific files like `application-dev.properties` are only loaded and take precedence over `application.properties` *if* the corresponding profile (`dev` in this case) is explicitly activated. Without an active profile, `application-dev.properties` is simply ignored."
     },
     {
-      "question": "When a constructor of a subclass is invoked in Java, what automatically happens regarding its superclass?",
-      "optionA": "The superclass constructor is explicitly called by the subclass using `this()` as the last statement.",
-      "optionB": "The superclass constructor is automatically called *before* the subclass constructor body, either implicitly or explicitly via `super()`.",
-      "optionC": "The superclass constructor is only called if the subclass explicitly defines a `super()` call anywhere within its body.",
-      "optionD": "Subclass constructors cannot call superclass constructors; they must rely on default initialization of inherited members.",
-      "answer": "The superclass constructor is automatically called *before* the subclass constructor body, either implicitly or explicitly via `super()`.",
-      "explanation": "In Java, the superclass constructor is always the first statement executed in a subclass constructor. If you don't explicitly call a superclass constructor using `super(...)` as the first statement, the compiler automatically inserts an implicit call to the no-argument superclass constructor `super()`. This ensures that the superclass's state is properly initialized before the subclass's state."
-    },
-    {
-      "question": "Which of the following statements accurately describes a key difference between method overloading and method overriding in Java?",
-      "optionA": "Method overloading determines which method to call at runtime (dynamic polymorphism), while overriding is resolved at compile time (static polymorphism).",
-      "optionB": "Method overloading allows different return types for methods with the same name and parameters, whereas overriding requires identical return types (or covariant in specific cases).",
-      "optionC": "Method overloading changes the method signature by varying the number or type of parameters, while method overriding provides a new implementation for a method with the exact same signature in a subclass.",
-      "optionD": "Method overloading can only occur within the same class, while method overriding can only occur between an interface and its implementing class.",
-      "answer": "Method overloading changes the method signature by varying the number or type of parameters, while method overriding provides a new implementation for a method with the exact same signature in a subclass.",
-      "explanation": "Method overloading occurs when multiple methods in the same class (or across an inheritance hierarchy) share the same name but have different parameter lists (different signatures). This is a compile-time (static) polymorphism. Method overriding occurs when a subclass provides its own specific implementation for a method that is already defined in its superclass, keeping the exact same method signature (name, parameters, and return type compatibility). This is a runtime (dynamic) polymorphism."
+      "question": "To diagnose an issue in a deployed Spring Boot application, you need to inspect all currently registered Spring beans and their types. Which Actuator endpoint would provide this detailed information?",
+      "optionA": "`/actuator/env`",
+      "optionB": "`/actuator/beans`",
+      "optionC": "`/actuator/info`",
+      "optionD": "`/actuator/configprops`",
+      "answer": "`/actuator/beans`",
+      "explanation": "The `/actuator/beans` endpoint provides a comprehensive list of all Spring beans loaded into the application context, including their types, scopes, and dependencies. Other endpoints serve different purposes: `/env` for environment properties, `/info` for general application information, and `/configprops` for beans annotated with `@ConfigurationProperties`."
     }
   ]

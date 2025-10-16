@@ -27,7 +27,17 @@ public class MyConfig {
                 .csrf(configurer ->configurer.disable())
                 .authorizeHttpRequests(auth ->
                         auth
-                                .requestMatchers("/home/register").permitAll()
+                                .requestMatchers(
+                                        "/",
+                                        "/swagger-ui/**",
+                                        "/v3/api-docs/**",
+                                        "swagger-ui/index.html#/",
+                                        "/register",
+                                        "/css/**",
+                                        "/js/**",
+                                        "/index.html",
+                                        "/register.html"
+                                        ).permitAll()
                                 .anyRequest().authenticated())
                 .formLogin(Customizer.withDefaults())
                 .httpBasic(Customizer.withDefaults())

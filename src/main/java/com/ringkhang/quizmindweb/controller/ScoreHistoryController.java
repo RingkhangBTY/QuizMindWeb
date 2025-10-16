@@ -21,4 +21,9 @@ public class ScoreHistoryController {
     public List<ScoreHistoryDisplay> getCurrentUserHistory(){
         return service.getScoreHistoriesByUserId(usersDetailsService.getCurrentUserId());
     }
+
+    @PostMapping("testAgain")
+    public List<QuizDetails> testAgain(@RequestBody ScoreHistoryDisplay scoreHistoryDisplay){
+        return service.getQuestionsByTimestamp(scoreHistoryDisplay.getTime_stamp());
+    }
 }
