@@ -1,11 +1,11 @@
 package com.ringkhang.quizmindweb.controller;
 
+import com.ringkhang.quizmindweb.model.QuizDetails;
 import com.ringkhang.quizmindweb.model.ScoreHistoryDisplay;
 import com.ringkhang.quizmindweb.service.ScoreHistoryService;
+import com.ringkhang.quizmindweb.service.UsersDetailsService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -14,10 +14,11 @@ public class ScoreHistoryController {
 
     @Autowired
     private ScoreHistoryService service;
+    @Autowired
+    private UsersDetailsService usersDetailsService;
 
-    @GetMapping("/scoreHistory/{userId}")
-    public List<ScoreHistoryDisplay> getHistory(@PathVariable("userId") int id){
-        return service.getScoreHistoriesByUserId(id);
+    @GetMapping("/scoreHistory")
+    public List<ScoreHistoryDisplay> getCurrentUserHistory(){
+        return service.getScoreHistoriesByUserId(usersDetailsService.getCurrentUserId());
     }
-
 }

@@ -4,6 +4,8 @@ import com.ringkhang.quizmindweb.model.UserDetailsTable;
 import com.ringkhang.quizmindweb.model.UsersPrincipal;
 import com.ringkhang.quizmindweb.repo.UserDetailsRepo;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;

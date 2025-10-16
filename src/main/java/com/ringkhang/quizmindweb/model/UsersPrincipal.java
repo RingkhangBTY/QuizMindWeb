@@ -15,6 +15,10 @@ public class UsersPrincipal implements UserDetails {
         this.user = user;
     }
 
+    public UserDetailsTable getUser() {
+        return user;
+    }
+
     /**
      * Returns the authorities granted to the user. Cannot return <code>null</code>.
      *

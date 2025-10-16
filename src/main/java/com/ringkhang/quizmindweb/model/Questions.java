@@ -15,4 +15,10 @@ public class Questions {
     private String optionD;
     private String answer;
     private String explanation;
+    private String userAnswer; // User's selected answer
+
+    // Method to check if user answered correctly
+//    public boolean isCorrect() {
+//        return userAnswer != null && userAnswer.equals(answer);
+//    }
 }

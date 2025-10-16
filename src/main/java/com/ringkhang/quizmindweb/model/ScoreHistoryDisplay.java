@@ -19,6 +19,9 @@ public class ScoreHistoryDisplay {
     private int correct_ans;
     private int test_score;
     private String feedback;
+    private String topic_sub;
+    private  String level;
+    private  String short_des;
     private LocalDateTime time_stamp;
 
 //    public ScoreHistoryDisplay(String username, int correctAns, int testScore, String feedback, Timestamp timeStamp) {
