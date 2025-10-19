@@ -8,6 +8,7 @@ import lombok.Setter;
 @Getter @Setter @RequiredArgsConstructor
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class Questions {
+
     private String question;
     private String optionA;
     private String optionB;

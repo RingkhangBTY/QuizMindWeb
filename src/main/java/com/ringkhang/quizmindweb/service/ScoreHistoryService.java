@@ -60,6 +60,11 @@ public class ScoreHistoryService {
         return quizRepo.getQuestionsDetails(scoreHistoryId);
     }
 
+
+    public List<QuizDetails> getQuestionsByTimestamp(LocalDateTime timestamp) {
+        return historyRepo.getQuizDetailsByTimestamp(timestamp);
+    }
+
     public void save(ScoreHistoryTable scoreHistory) {
         historyRepo.save(scoreHistory);
     }

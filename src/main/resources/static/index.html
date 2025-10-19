@@ -2,9 +2,992 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>QuizMind</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: Arial, sans-serif;
+        }
+
+        body {
+            background-color: #f5f5f5;
+            color: #333;
+        }
+
+        .header {
+            background-color: #2c3e50;
+            color: white;
+            padding: 15px 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .header h1 {
+            font-size: 1.5em;
+        }
+
+        .header nav a {
+            color: white;
+            text-decoration: none;
+            margin-left: 20px;
+            padding: 5px 10px;
+            border-radius: 3px;
+        }
+
+        .header nav a:hover {
+            background-color: #34495e;
+        }
+
+        .container {
+            display: flex;
+            min-height: calc(100vh - 60px);
+        }
+
+        .sidebar {
+            width: 200px;
+            background-color: #ecf0f1;
+            padding: 20px;
+        }
+
+        .sidebar h2 {
+            margin-bottom: 20px;
+            color: #2c3e50;
+        }
+
+        .sidebar ul {
+            list-style: none;
+        }
+
+        .sidebar li {
+            margin-bottom: 15px;
+        }
+
+        .sidebar a {
+            color: #2c3e50;
+            text-decoration: none;
+            display: block;
+            padding: 8px;
+            border-radius: 4px;
+        }
+
+        .sidebar a:hover {
+            background-color: #d5dbdb;
+        }
+
+        .main-content {
+            flex: 1;
+            padding: 20px;
+        }
+
+        .page {
+            display: none;
+            background-color: white;
+            padding: 20px;
+            border-radius: 5px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+
+        .active {
+            display: block;
+        }
+
+        .form-group {
+            margin-bottom: 15px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+        }
+
+        input, select, textarea {
+            width: 100%;
+            padding: 8px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+        }
+
+        button {
+            background-color: #3498db;
+            color: white;
+            border: none;
+            padding: 10px 15px;
+            border-radius: 4px;
+            cursor: pointer;
+            margin-right: 10px;
+        }
+
+        button:hover {
+            background-color: #2980b9;
+        }
+
+        button:disabled {
+            background-color: #95a5a6;
+            cursor: not-allowed;
+        }
+
+        .question {
+            margin-bottom: 20px;
+            padding-bottom: 15px;
+            border-bottom: 1px solid #eee;
+        }
+
+        .options {
+            margin: 10px 0;
+        }
+
+        .option {
+            margin: 5px 0;
+            padding: 8px;
+            background-color: #f9f9f9;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+
+        .option.selected {
+            background-color: #d4edda;
+        }
+
+        .option.correct {
+            background-color: #c8e6c9;
+            border-left: 4px solid #4caf50;
+        }
+
+        .option.incorrect {
+            background-color: #ffcdd2;
+            border-left: 4px solid #f44336;
+        }
+
+        .explanation {
+            margin-top: 10px;
+            padding: 10px;
+            background-color: #e8f4fd;
+            border-radius: 4px;
+        }
+
+        .score-card {
+            text-align: center;
+            margin: 20px 0;
+            padding: 20px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            background-color: #f9f9f9;
+        }
+
+        .score {
+            font-size: 2em;
+            font-weight: bold;
+            color: #3498db;
+            margin: 10px 0;
+        }
+
+        .history-item {
+            margin-bottom: 20px;
+            padding: 15px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+        }
+
+        .history-date {
+            font-weight: bold;
+            margin-bottom: 10px;
+            padding-bottom: 5px;
+            border-bottom: 1px solid #eee;
+        }
+
+        .history-subject-level {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 10px;
+        }
+
+        .history-stats {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 10px;
+        }
+
+        .history-feedback {
+            margin-bottom: 10px;
+            padding: 10px;
+            background-color: #f9f9f9;
+            border-radius: 4px;
+        }
+
+        .level-badge {
+            display: inline-block;
+            padding: 3px 8px;
+            border-radius: 10px;
+            font-size: 0.8em;
+            font-weight: bold;
+        }
+
+        .level-easy {
+            background-color: #d4edda;
+            color: #155724;
+        }
+
+        .level-medium {
+            background-color: #fff3cd;
+            color: #856404;
+        }
+
+        .level-hard {
+            background-color: #f8d7da;
+            color: #721c24;
+        }
+
+        .level-godmode {
+            background-color: #e2e3e5;
+            color: #383d41;
+        }
+
+        .personal-info {
+            margin-top: 20px;
+            padding-top: 15px;
+            border-top: 1px solid #eee;
+        }
+
+        .personal-info p {
+            margin-bottom: 5px;
+        }
+
+        .error-message {
+            color: #e74c3c;
+            margin-top: 10px;
+            padding: 10px;
+            background-color: #fadbd8;
+            border-radius: 4px;
+            display: none;
+        }
+
+        .loading {
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            border: 3px solid #f3f3f3;
+            border-radius: 50%;
+            border-top-color: #3498db;
+            animation: spin 1s ease-in-out infinite;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        .loading-container {
+            text-align: center;
+            padding: 30px;
+        }
+
+        .correct-answer {
+            margin-top: 10px;
+            padding: 8px;
+            background-color: #e8f5e9;
+            border-radius: 4px;
+            border-left: 4px solid #4caf50;
+        }
+
+        .user-answer {
+            margin-top: 5px;
+            padding: 8px;
+            background-color: #ffebee;
+            border-radius: 4px;
+            border-left: 4px solid #f44336;
+        }
+
+        .user-answer.correct {
+            background-color: #e8f5e9;
+            border-left: 4px solid #4caf50;
+        }
+    </style>
 </head>
 <body>
+<!-- Header -->
+<div class="header">
+    <h1>QuizMind</h1>
+    <nav id="headerNav" style="display: none;">
+        <a href="#" onclick="showPage('home')">Home</a>
+        <a href="#" onclick="showPage('profile')">Profile</a>
+        <a href="#" onclick="logout()">Logout</a>
+    </nav>
+</div>
 
+<!-- Main Container -->
+<div class="container">
+    <!-- Sidebar -->
+    <div id="sidebar" class="sidebar" style="display: none;">
+        <h2>Quiz Actions</h2>
+        <ul>
+            <li><a href="#" onclick="showPage('startQuiz')">Start Quiz</a></li>
+            <li><a href="#" onclick="showPage('history')">Load History</a></li>
+        </ul>
+    </div>
+
+    <!-- Main Content -->
+    <div class="main-content">
+        <!-- Register Page -->
+        <div id="registerPage" class="page active">
+            <h2>REGISTER</h2>
+            <div class="form-group">
+                <label>Username</label>
+                <input type="text" id="username">
+            </div>
+            <div class="form-group">
+                <label>Email</label>
+                <input type="email" id="email">
+            </div>
+            <div class="form-group">
+                <label>Password</label>
+                <input type="password" id="password">
+            </div>
+            <button onclick="register()">Register</button>
+            <p>Already have an account? <a href="/login">Login here</a></p>
+            <div id="registerError" class="error-message"></div>
+        </div>
+
+        <!-- Home Page -->
+        <div id="homePage" class="page">
+            <h2>HOME</h2>
+            <p>Start and Load history</p>
+            <div class="description">
+                <p>QuizMindWeb is a Spring Boot-based web application for managing quizzes, user accounts, and score histories. It uses JPA for database interactions, allowing users to answer questions, track their performance, etc. The project features entity models for users, questions, and score records, supporting a structured and interactive quiz experience.</p>
+            </div>
+            <div class="personal-info">
+                <p>Email: ringkhangb913@gmail.com</p>
+                <p>Github: <a href="https://github.com/RingkhangBTY" target="_blank">https://github.com/RingkhangBTY</a></p>
+            </div>
+        </div>
+
+        <!-- Start Quiz - User Input -->
+        <div id="startQuizPage" class="page">
+            <h2>Start Quiz</h2>
+            <div class="form-group">
+                <label>Subject</label>
+                <input type="text" id="subject">
+            </div>
+            <div class="form-group">
+                <label>Topic/short description</label>
+                <input type="text" id="topic">
+            </div>
+            <div class="form-group">
+                <label>Level</label>
+                <select id="level">
+                    <option value="Easy">Easy</option>
+                    <option value="Medium">Medium</option>
+                    <option value="Hard">Hard</option>
+                    <option value="GodMode">GodMode</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label>No of Q</label>
+                <input type="number" id="questionCount" min="1" max="50" value="10">
+            </div>
+            <button id="startQuizBtn" onclick="startQuiz()">Start</button>
+            <div id="quizError" class="error-message"></div>
+            <div id="quizLoading" class="loading-container" style="display: none;">
+                <div class="loading"></div>
+                <p>Loading quiz questions...</p>
+            </div>
+        </div>
+
+        <!-- Quiz Page -->
+        <div id="quizPage" class="page">
+            <h2>Quiz</h2>
+            <div id="quizContainer">
+                <!-- Questions will be dynamically inserted here -->
+            </div>
+            <button id="submitQuizBtn" onclick="submitQuiz()">Submit</button>
+            <div id="submitLoading" class="loading-container" style="display: none;">
+                <div class="loading"></div>
+                <p>Submitting quiz...</p>
+            </div>
+        </div>
+
+        <!-- Results Page -->
+        <div id="resultsPage" class="page">
+            <h2>Results</h2>
+            <div class="score-card">
+                <p>Total questions: <span id="totalQuestions">0</span></p>
+                <p>Correct one: <span id="correctAnswers">0</span></p>
+                <div class="score">Your Score: <span id="scoreValue">0</span>%</div>
+            </div>
+
+            <!-- Quiz Review with Explanations -->
+            <div id="quizReview" style="margin-top: 30px;">
+                <h3>Quiz Review</h3>
+                <div id="reviewContainer">
+                    <!-- Questions with explanations will be inserted here -->
+                </div>
+            </div>
+
+            <button onclick="showPage('home')">Test again</button>
+        </div>
+
+        <!-- History Page -->
+        <div id="historyPage" class="page">
+            <h2>History</h2>
+            <div id="historyLoading" class="loading-container" style="display: none;">
+                <div class="loading"></div>
+                <p>Loading history...</p>
+            </div>
+            <div id="historyContainer">
+                <!-- History items will be dynamically inserted here -->
+            </div>
+            <div id="historyError" class="error-message"></div>
+        </div>
+
+        <!-- Profile Page -->
+        <div id="profilePage" class="page">
+            <h2>PROFILE</h2>
+            <div id="profileDetails">
+                <!-- User details will be dynamically inserted here -->
+            </div>
+            <div id="profileError" class="error-message"></div>
+        </div>
+    </div>
+</div>
+
+<script>
+    // Current state
+    let currentUser = null;
+    let currentQuiz = null;
+    let quizHistory = [];
+
+    // API endpoints
+    const API_BASE = window.location.origin;
+    const API_ENDPOINTS = {
+        REGISTER: '/register',
+        USERS: '/users',
+        START_QUIZ: '/start',
+        SUBMIT_QUIZ: '/submit',
+        SCORE_HISTORY: '/scoreHistory',
+        TEST_AGAIN: '/testAgain'
+    };
+
+    // Show the specified page
+    function showPage(pageId) {
+        // Hide all pages
+        document.querySelectorAll('.page').forEach(page => {
+            page.classList.remove('active');
+        });
+
+        // Show the requested page
+        document.getElementById(pageId + 'Page').classList.add('active');
+
+        // Load data if needed
+        if (pageId === 'history') {
+            loadHistory();
+        } else if (pageId === 'profile') {
+            loadProfile();
+        }
+    }
+
+    // Check if user is logged in
+    async function checkAuthStatus() {
+        try {
+            console.log('Checking authentication status...');
+            const response = await fetch(API_ENDPOINTS.USERS, {
+                method: 'GET',
+                credentials: 'include',
+                headers: {
+                    'Content-Type': 'application/json'
+                }
+            });
+
+            console.log('Auth check response status:', response.status);
+
+            if (response.ok) {
+                currentUser = await response.json();
+                console.log('User is logged in:', currentUser);
+                // User is logged in, show main app
+                document.getElementById('headerNav').style.display = 'block';
+                document.getElementById('sidebar').style.display = 'block';
+                showPage('home');
+            } else if (response.status === 401) {
+                // User is not authenticated
+                console.log('User is not authenticated');
+                showRegisterPage();
+            } else {
+                // Other error
+                console.log('Unexpected response status:', response.status);
+                showRegisterPage();
+            }
+        } catch (error) {
+            console.error('Error checking auth status:', error);
+            showRegisterPage();
+        }
+    }
+
+    // Show register page and hide authenticated UI
+    function showRegisterPage() {
+        document.getElementById('headerNav').style.display = 'none';
+        document.getElementById('sidebar').style.display = 'none';
+        showPage('register');
+    }
+
+    // Register user
+    async function register() {
+        const username = document.getElementById('username').value;
+        const email = document.getElementById('email').value;
+        const password = document.getElementById('password').value;
+
+        // Clear previous errors
+        document.getElementById('registerError').style.display = 'none';
+
+        // Basic validation
+        if (!username || !email || !password) {
+            document.getElementById('registerError').textContent = 'Please fill in all fields';
+            document.getElementById('registerError').style.display = 'block';
+            return;
+        }
+
+        try {
+            const userData = {
+                username: username,
+                email: email,
+                pass: password
+            };
+
+            console.log('Registering user:', userData);
+
+            const response = await fetch(API_ENDPOINTS.REGISTER, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(userData)
+            });
+
+            if (response.ok) {
+                alert('Registration successful! Redirecting to login...');
+                // Redirect to Spring Security login
+                window.location.href = '/login';
+            } else {
+                const errorText = await response.text();
+                document.getElementById('registerError').textContent = 'Registration failed: ' + (errorText || 'Please try again.');
+                document.getElementById('registerError').style.display = 'block';
+            }
+        } catch (error) {
+            console.error('Registration error:', error);
+            document.getElementById('registerError').textContent = 'An error occurred during registration. Please try again.';
+            document.getElementById('registerError').style.display = 'block';
+        }
+    }
+
+    // Start quiz
+    async function startQuiz() {
+        const subject = document.getElementById('subject').value;
+        const topic = document.getElementById('topic').value;
+        const level = document.getElementById('level').value;
+        const questionCount = document.getElementById('questionCount').value;
+
+        // Clear previous errors
+        document.getElementById('quizError').style.display = 'none';
+
+        // Basic validation
+        if (!subject || !topic) {
+            document.getElementById('quizError').textContent = 'Please fill in subject and topic fields';
+            document.getElementById('quizError').style.display = 'block';
+            return;
+        }
+
+        // Show loading state
+        document.getElementById('startQuizBtn').disabled = true;
+        document.getElementById('quizLoading').style.display = 'block';
+
+        try {
+            const userInput = {
+                programmingLanguage_Subject: subject,
+                shortDes_Topic_Concepts: topic,
+                level: level,
+                noOfQ: parseInt(questionCount)
+            };
+
+            console.log('Starting quiz with input:', userInput);
+
+            const response = await fetch(API_ENDPOINTS.START_QUIZ, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(userInput),
+                credentials: 'include'
+            });
+
+            if (response.ok) {
+                const questions = await response.json();
+                console.log('Received questions:', questions);
+
+                currentQuiz = {
+                    userInput: userInput,
+                    questions: questions,
+                    userAnswers: new Array(questions.length).fill(null),
+                    userAnswerTexts: new Array(questions.length).fill(null)
+                };
+
+                renderQuiz();
+                showPage('quiz');
+            } else {
+                const errorText = await response.text();
+                document.getElementById('quizError').textContent = 'Failed to start quiz: ' + (errorText || 'Please try again.');
+                document.getElementById('quizError').style.display = 'block';
+            }
+        } catch (error) {
+            console.error('Error starting quiz:', error);
+            document.getElementById('quizError').textContent = 'An error occurred while starting the quiz. Please try again.';
+            document.getElementById('quizError').style.display = 'block';
+        } finally {
+            // Reset loading state
+            document.getElementById('startQuizBtn').disabled = false;
+            document.getElementById('quizLoading').style.display = 'none';
+        }
+    }
+
+    // Render quiz questions
+    function renderQuiz() {
+        const container = document.getElementById('quizContainer');
+        container.innerHTML = '';
+
+        currentQuiz.questions.forEach((question, index) => {
+            const questionDiv = document.createElement('div');
+            questionDiv.className = 'question';
+
+            questionDiv.innerHTML = `
+                    <h3>Question ${index + 1}: ${question.question}</h3>
+                    <div class="options">
+                        <div class="option" onclick="selectAnswer(${index}, 'A', '${question.optionA}')">A. ${question.optionA}</div>
+                        <div class="option" onclick="selectAnswer(${index}, 'B', '${question.optionB}')">B. ${question.optionB}</div>
+                        <div class="option" onclick="selectAnswer(${index}, 'C', '${question.optionC}')">C. ${question.optionC}</div>
+                        <div class="option" onclick="selectAnswer(${index}, 'D', '${question.optionD}')">D. ${question.optionD}</div>
+                    </div>
+                `;
+
+            container.appendChild(questionDiv);
+        });
+    }
+
+    // Select answer for a question
+    function selectAnswer(questionIndex, answer, answerText) {
+        currentQuiz.userAnswers[questionIndex] = answer;
+        currentQuiz.userAnswerTexts[questionIndex] = answerText;
+
+        // Highlight selected option
+        const questionDiv = document.getElementById('quizContainer').children[questionIndex];
+        const options = questionDiv.querySelectorAll('.option');
+
+        options.forEach(option => {
+            option.classList.remove('selected');
+        });
+
+        // Find and highlight the selected option
+        const optionIndex = ['A', 'B', 'C', 'D'].indexOf(answer);
+        if (optionIndex >= 0) {
+            options[optionIndex].classList.add('selected');
+        }
+    }
+
+    // Submit quiz
+    async function submitQuiz() {
+        try {
+            // Show loading state
+            document.getElementById('submitQuizBtn').disabled = true;
+            document.getElementById('submitLoading').style.display = 'block';
+
+            // Prepare questions with user answers - CORRECTED FOR BACKEND
+            const questionsForSubmission = currentQuiz.questions.map((question, index) => {
+                // Get the correct answer text based on the answer letter
+                let correctAnswerText = '';
+                if (question.answer === 'A') correctAnswerText = question.optionA;
+                else if (question.answer === 'B') correctAnswerText = question.optionB;
+                else if (question.answer === 'C') correctAnswerText = question.optionC;
+                else if (question.answer === 'D') correctAnswerText = question.optionD;
+
+                return {
+                    question: question.question,
+                    optionA: question.optionA,
+                    optionB: question.optionB,
+                    optionC: question.optionC,
+                    optionD: question.optionD,
+                    answer: correctAnswerText, // Send the actual answer text, not the letter
+                    explanation: question.explanation,
+                    userAnswer: currentQuiz.userAnswerTexts[index] // Send the user's selected answer text
+                };
+            });
+
+            console.log('Submitting quiz with answers:', questionsForSubmission);
+
+            const response = await fetch(API_ENDPOINTS.SUBMIT_QUIZ, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(questionsForSubmission),
+                credentials: 'include'
+            });
+
+            if (response.ok) {
+                const result = await response.json();
+                console.log('Quiz submission result:', result);
+
+                // Display results from backend response
+                document.getElementById('totalQuestions').textContent = result.TotalQuestions;
+                document.getElementById('correctAnswers').textContent = result.CorrectAnswers;
+                document.getElementById('scoreValue').textContent = result.Score;
+
+                // Render quiz review with explanations
+                renderQuizReview();
+
+                showPage('results');
+            } else {
+                const errorText = await response.text();
+                alert('Failed to submit quiz: ' + (errorText || 'Please try again.'));
+            }
+        } catch (error) {
+            console.error('Error submitting quiz:', error);
+            alert('An error occurred while submitting the quiz.');
+        } finally {
+            // Reset loading state
+            document.getElementById('submitQuizBtn').disabled = false;
+            document.getElementById('submitLoading').style.display = 'none';
+        }
+    }
+
+    // Render quiz review with explanations
+    function renderQuizReview() {
+        const container = document.getElementById('reviewContainer');
+        container.innerHTML = '';
+
+        currentQuiz.questions.forEach((question, index) => {
+            const questionDiv = document.createElement('div');
+            questionDiv.className = 'question';
+
+            // Determine which option was correct and which was selected
+            const correctOption = question.answer;
+            const userAnswer = currentQuiz.userAnswers[index];
+            const userAnswerText = currentQuiz.userAnswerTexts[index];
+            const isCorrect = userAnswer === correctOption;
+
+            // Get the correct answer text
+            let correctAnswerText = '';
+            if (correctOption === 'A') correctAnswerText = question.optionA;
+            else if (correctOption === 'B') correctAnswerText = question.optionB;
+            else if (correctOption === 'C') correctAnswerText = question.optionC;
+            else if (correctOption === 'D') correctAnswerText = question.optionD;
+
+            questionDiv.innerHTML = `
+                    <h3>Question ${index + 1}: ${question.question}</h3>
+                    <div class="options">
+                        <div class="option ${correctOption === 'A' ? 'correct' : ''} ${userAnswer === 'A' && !isCorrect ? 'incorrect' : ''}">
+                            A. ${question.optionA} ${correctOption === 'A' ? '✓' : ''}
+                        </div>
+                        <div class="option ${correctOption === 'B' ? 'correct' : ''} ${userAnswer === 'B' && !isCorrect ? 'incorrect' : ''}">
+                            B. ${question.optionB} ${correctOption === 'B' ? '✓' : ''}
+                        </div>
+                        <div class="option ${correctOption === 'C' ? 'correct' : ''} ${userAnswer === 'C' && !isCorrect ? 'incorrect' : ''}">
+                            C. ${question.optionC} ${correctOption === 'C' ? '✓' : ''}
+                        </div>
+                        <div class="option ${correctOption === 'D' ? 'correct' : ''} ${userAnswer === 'D' && !isCorrect ? 'incorrect' : ''}">
+                            D. ${question.optionD} ${correctOption === 'D' ? '✓' : ''}
+                        </div>
+                    </div>
+                    <div class="correct-answer">
+                        <strong>Correct Answer:</strong> ${correctAnswerText}
+                    </div>
+                    ${userAnswerText ? `
+                        <div class="user-answer ${isCorrect ? 'correct' : ''}">
+                            <strong>Your Answer:</strong> ${userAnswerText} ${isCorrect ? '✓' : '✗'}
+                        </div>
+                    ` : `
+                        <div class="user-answer">
+                            <strong>Your Answer:</strong> Not answered ✗
+                        </div>
+                    `}
+                    <div class="explanation">
+                        <strong>Explanation:</strong> ${question.explanation}
+                    </div>
+                `;
+
+            container.appendChild(questionDiv);
+        });
+    }
+
+    // Load history
+    async function loadHistory() {
+        try {
+            // Show loading indicator
+            document.getElementById('historyLoading').style.display = 'block';
+            document.getElementById('historyContainer').innerHTML = '';
+            document.getElementById('historyError').style.display = 'none';
+
+            console.log('Loading history for current user...');
+
+            const response = await fetch(API_ENDPOINTS.SCORE_HISTORY, {
+                method: 'GET',
+                credentials: 'include',
+                headers: {
+                    'Content-Type': 'application/json'
+                }
+            });
+
+            console.log('History response status:', response.status);
+
+            if (response.ok) {
+                quizHistory = await response.json();
+                console.log('Loaded history:', quizHistory);
+                renderHistory();
+            } else if (response.status === 401) {
+                // User is not authenticated
+                document.getElementById('historyError').textContent = 'Please log in to view your history';
+                document.getElementById('historyError').style.display = 'block';
+                showRegisterPage();
+            } else {
+                const errorText = await response.text();
+                document.getElementById('historyError').textContent = 'Failed to load history: ' + (errorText || 'Please try again.');
+                document.getElementById('historyError').style.display = 'block';
+            }
+        } catch (error) {
+            console.error('Error loading history:', error);
+            document.getElementById('historyError').textContent = 'Error loading history. Please try again.';
+            document.getElementById('historyError').style.display = 'block';
+        } finally {
+            // Hide loading indicator
+            document.getElementById('historyLoading').style.display = 'none';
+        }
+    }
+
+    // Render history
+    function renderHistory() {
+        const container = document.getElementById('historyContainer');
+        container.innerHTML = '';
+
+        if (quizHistory.length === 0) {
+            container.innerHTML = '<p>No quiz history found. Complete a quiz to see your history here.</p>';
+            return;
+        }
+
+        quizHistory.forEach(item => {
+            const historyItem = document.createElement('div');
+            historyItem.className = 'history-item';
+
+            // Format date
+            const date = new Date(item.time_stamp);
+            const formattedDate = date.toLocaleDateString() + ' ' + date.toLocaleTimeString();
+
+            historyItem.innerHTML = `
+                    <div class="history-date">Date & time: ${formattedDate}</div>
+                    <div class="history-subject-level">
+                        <div>Subject: ${item.topic_sub}</div>
+                        <div>Level: <span class="level-badge level-${item.level.toLowerCase()}">${item.level}</span></div>
+                    </div>
+                    <div class="history-stats">
+                        <div>Total questions: ${item.total_question}</div>
+                        <div>Correct ans: ${item.correct_ans}</div>
+                        <div>Score: ${item.test_score}%</div>
+                    </div>
+                    <div class="history-feedback">Feedback: ${item.feedback}</div>
+                    <button onclick="testAgain('${item.time_stamp}')">Test again</button>
+                `;
+
+            container.appendChild(historyItem);
+        });
+    }
+
+    // Test again with previous settings
+    async function testAgain(timestamp) {
+        try {
+            console.log('Testing again with timestamp:', timestamp);
+
+            const response = await fetch(API_ENDPOINTS.TEST_AGAIN, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ time_stamp: timestamp }),
+                credentials: 'include'
+            });
+
+            if (response.ok) {
+                const questions = await response.json();
+                console.log('Received questions for test again:', questions);
+
+                currentQuiz = {
+                    questions: questions,
+                    userAnswers: new Array(questions.length).fill(null),
+                    userAnswerTexts: new Array(questions.length).fill(null)
+                };
+
+                renderQuiz();
+                showPage('quiz');
+            } else {
+                const errorText = await response.text();
+                alert('Failed to load quiz: ' + (errorText || 'Please try again.'));
+            }
+        } catch (error) {
+            console.error('Error loading quiz:', error);
+            alert('An error occurred while loading the quiz.');
+        }
+    }
+
+    // Load profile
+    async function loadProfile() {
+        try {
+            console.log('Loading profile...');
+
+            const response = await fetch(API_ENDPOINTS.USERS, {
+                method: 'GET',
+                credentials: 'include',
+                headers: {
+                    'Content-Type': 'application/json'
+                }
+            });
+
+            if (response.ok) {
+                const user = await response.json();
+                console.log('Loaded user profile:', user);
+                document.getElementById('profileDetails').innerHTML = `
+                        <div class="form-group">
+                            <label>Username</label>
+                            <input type="text" value="${user.username}" readonly>
+                        </div>
+                        <div class="form-group">
+                            <label>Email</label>
+                            <input type="email" value="${user.email}" readonly>
+                        </div>
+                    `;
+            } else if (response.status === 401) {
+                document.getElementById('profileError').textContent = 'Please log in to view your profile';
+                document.getElementById('profileError').style.display = 'block';
+                showRegisterPage();
+            } else {
+                const errorText = await response.text();
+                document.getElementById('profileError').textContent = 'Failed to load profile: ' + (errorText || 'Please try again.');
+                document.getElementById('profileError').style.display = 'block';
+            }
+        } catch (error) {
+            console.error('Error loading profile:', error);
+            document.getElementById('profileError').textContent = 'Error loading profile. Please try again.';
+            document.getElementById('profileError').style.display = 'block';
+        }
+    }
+
+    // Logout
+    function logout() {
+        console.log('Logging out...');
+        // Redirect to Spring Security logout
+        window.location.href = '/logout';
+    }
+
+    // Initialize the application
+    window.onload = function() {
+        console.log('Initializing QuizMind application...');
+        checkAuthStatus();
+    };
+</script>
 </body>
 </html>

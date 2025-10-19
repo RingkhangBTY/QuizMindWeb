@@ -19,7 +19,8 @@ public class HomeController {
     @GetMapping("/")
     @Hidden
     public void Home(HttpServletResponse response) throws IOException {
-        response.sendRedirect("swagger-ui.html");
+//        response.sendRedirect("swagger-ui.html");
+        response.sendRedirect("index.html");
     }
 
     @PostMapping("/register")
