@@ -1,47 +1,20 @@
 [
     {
-      "question": "What is a key characteristic of Spring Boot that simplifies the development of Spring applications?",
-      "optionA": "It requires extensive XML configuration for every component.",
-      "optionB": "It promotes convention over configuration and offers embedded servers.",
-      "optionC": "It mandates the use of only NoSQL databases.",
-      "optionD": "It replaces the JVM with its own runtime environment.",
-      "answer": "It promotes convention over configuration and offers embedded servers.",
-      "explanation": "Spring Boot simplifies development by emphasizing 'convention over configuration', meaning it makes sensible defaults for many settings. It also includes embedded web servers (like Tomcat or Jetty) by default, allowing applications to run as standalone JARs without needing an external server deployment."
+      "question": "Which of the following best describes the primary benefit Spring Boot brings to Spring application development?",
+      "optionA": "It completely replaces the need for the Spring Framework.",
+      "optionB": "It automatically deploys applications to cloud platforms without any configuration.",
+      "optionC": "It simplifies initial setup and configuration through auto-configuration and 'opinionated' defaults.",
+      "optionD": "It mandates the use of a specific database technology for all projects.",
+      "answer": "It simplifies initial setup and configuration through auto-configuration and 'opinionated' defaults.",
+      "explanation": "Spring Boot's main advantage is simplifying the initial setup and configuration of Spring applications. It achieves this by providing 'opinionated' default configurations and auto-configuration, which significantly reduces the amount of boilerplate code and manual setup developers need to do."
     },
     {
-      "question": "When you want to define the entry point of your Spring Boot application, which core annotation should you place on your main class?",
-      "optionA": "@EnableAutoConfiguration",
-      "optionB": "@ComponentScan",
-      "optionC": "@SpringBootApplication",
-      "optionD": "@Configuration",
-      "answer": "@SpringBootApplication",
-      "explanation": "The `@SpringBootApplication` annotation is a convenient meta-annotation that combines three important annotations: `@Configuration`, `@EnableAutoConfiguration`, and `@ComponentScan`. It's the standard and simplest way to mark the main class of a Spring Boot application, enabling auto-configuration and component scanning from that package."
-    },
-    {
-      "question": "If you are starting a new Spring Boot project and need a quick way to generate the project structure with necessary dependencies, which web-based tool would you typically use?",
-      "optionA": "Spring Data JPA Console",
-      "optionB": "Spring Cloud Config Server",
-      "optionC": "Spring Initializr",
-      "optionD": "Spring Tool Suite (STS) IDE",
-      "answer": "Spring Initializr",
-      "explanation": "Spring Initializr is the official and most common web-based tool provided by VMware (formerly Pivotal) for quickly bootstrapping new Spring Boot projects. It allows developers to select project metadata, build tools (Maven/Gradle), Java version, and desired dependencies to generate a ready-to-import project structure."
-    },
-    {
-      "question": "Which of the following web servers is most commonly included by default as an *embedded* server in a standard Spring Boot web application starter?",
-      "optionA": "Nginx",
-      "optionB": "Apache Tomcat",
-      "optionC": "Microsoft IIS",
-      "optionD": "Node.js Express",
-      "answer": "Apache Tomcat",
-      "explanation": "Spring Boot applications can run as standalone executable JARs, thanks to embedded web servers. By default, when you use the `spring-boot-starter-web` dependency, Apache Tomcat is the embedded server that is automatically configured and included. Alternatives like Jetty and Undertow can also be chosen."
-    },
-    {
-      "question": "What is the primary role of \"Spring Boot Starters\" in managing project dependencies?",
-      "optionA": "To automatically deploy the application to a production server.",
-      "optionB": "To provide a set of pre-configured, opinionated dependencies for common use cases.",
-      "optionC": "To generate user interface components for web applications.",
-      "optionD": "To replace Maven or Gradle as the build tool.",
-      "answer": "To provide a set of pre-configured, opinionated dependencies for common use cases.",
-      "explanation": "Spring Boot Starters are a set of convenient dependency descriptors that you can include in your application. They provide a 'one-stop-shop' for all the Spring and related technologies that you need for a particular feature (e.g., `spring-boot-starter-web` for web development), simplifying dependency management by bundling compatible versions of libraries."
+      "question": "What is the recommended and most common tool used to quickly bootstrap a new Spring Boot project with all necessary dependencies and a basic project structure?",
+      "optionA": "Manually creating a Maven or Gradle project and adding dependencies one by one.",
+      "optionB": "Using the Spring Initializr (e.g., via start.spring.io or IDE integration).",
+      "optionC": "Copying an existing Spring Framework project and modifying it.",
+      "optionD": "Writing all necessary configuration XML files from scratch.",
+      "answer": "Using the Spring Initializr (e.g., via start.spring.io or IDE integration).",
+      "explanation": "The Spring Initializr is the official and most efficient way to generate new Spring Boot projects. It allows developers to select project type (Maven/Gradle), Java version, desired dependencies, and then generates a ready-to-import project archive."
     }
   ]
