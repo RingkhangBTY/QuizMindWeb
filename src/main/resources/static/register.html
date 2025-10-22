@@ -1,0 +1,26 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <title>Register - QuizMind</title>
+    <link rel="stylesheet" href="css/style.css" />
+</head>
+<body>
+<div class="center-box">
+    <div class="logo">QM</div>
+    <h1>Create an Account</h1>
+    <form id="register-form">
+        <label>Username</label>
+        <input id="username" type="text" required />
+        <label>Password</label>
+        <input id="password" type="password" required />
+        <label>Email</label>
+        <input id="email" type="email" required />
+        <button type="submit">Register</button>
+        <div id="msg" class="small"></div>
+    </form>
+    <p class="muted small">Already have an account? <a href="/login">Login here</a></p>
+</div>
+<script src="js/register.js"></script>
+</body>
+</html>
