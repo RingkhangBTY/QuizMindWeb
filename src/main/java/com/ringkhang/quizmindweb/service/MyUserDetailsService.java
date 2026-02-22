@@ -30,12 +30,25 @@ public class MyUserDetailsService implements UserDetailsService {
     @Autowired
     private UserDetailsRepo repo;
 
-    @Override
-    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+//    @Override
+//    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+//
+//        BCryptPasswordEncoder encoder = new BCryptPasswordEncoder(12);
+//        UserDetailsTable user = repo.findByUsername(username);
+//        user.setUsername(encoder.encode(user.getUsername()));
+//
+//        return new UsersPrincipal(user);
+//    }
 
-        BCryptPasswordEncoder encoder = new BCryptPasswordEncoder(12);
+    @Override
+    public UserDetails loadUserByUsername(String username)
+            throws UsernameNotFoundException {
+
         UserDetailsTable user = repo.findByUsername(username);
-        user.setUsername(encoder.encode(user.getUsername()));
+
+        if (user == null) {
+            throw new UsernameNotFoundException("User not found");
+        }
 
         return new UsersPrincipal(user);
     }

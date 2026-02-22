@@ -34,3 +34,5 @@ build/
 
 
 .env
+
+DATABASE_TABLES.txt

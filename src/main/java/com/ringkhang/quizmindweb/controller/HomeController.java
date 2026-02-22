@@ -32,4 +32,9 @@ public class HomeController {
     public UserDetailsTable getUserDetails(){
         return service.getCurrentUserDetails();
     }
+
+    @PostMapping("/login/auth")
+    public String login(@RequestParam String username, @RequestParam String pass){
+        return service.varify(username,pass);
+    }
 }

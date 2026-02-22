@@ -4,6 +4,8 @@ import com.ringkhang.quizmindweb.model.UserDetailsTable;
 import com.ringkhang.quizmindweb.model.UsersPrincipal;
 import com.ringkhang.quizmindweb.repo.UserDetailsRepo;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -14,6 +16,10 @@ public class UsersDetailsService {
 
     @Autowired
     private UserDetailsRepo repo;
+    @Autowired
+    private AuthenticationManager authenticationManager;
+    @Autowired
+    private JWTTokenService jwtTokenService;
 
     public void register(UserDetailsTable user) {
 
@@ -44,5 +50,16 @@ public class UsersDetailsService {
 
     public UserDetailsTable getCurrentUserDetails() {
         return repo.findById(getCurrentUserId()).orElse(new UserDetailsTable());
+    }
+
+    public String varify(String username, String pass) {
+        Authentication authentication = authenticationManager.
+                authenticate(
+                        new UsernamePasswordAuthenticationToken(username,pass)
+                );
+
+        if (authentication.isAuthenticated()) return jwtTokenService.getToken(username);
+
+        return "fails";
     }
 }

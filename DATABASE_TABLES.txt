@@ -1,0 +1,51 @@
+-- Create user_details table first (no foreign keys)
+CREATE TABLE user_details (
+    id SERIAL PRIMARY KEY,
+    username VARCHAR(255) NOT NULL,
+    password_hash VARCHAR(255) NOT NULL,
+    email VARCHAR(255) NOT NULL
+);
+
+-- Create score_history table (references user_details)
+CREATE TABLE score_history (
+    score_id SERIAL PRIMARY KEY,
+    s_user_id INTEGER NOT NULL,
+    total_question INTEGER,
+    correct_ans INTEGER,
+    test_score INTEGER,
+    time_stamp TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    feedback VARCHAR(255),
+    topic_sub VARCHAR(255),
+    level VARCHAR(255),
+    short_des TEXT,
+    CONSTRAINT fk_score_user FOREIGN KEY (s_user_id)
+        REFERENCES user_details(id)
+        ON DELETE CASCADE
+);
+
+-- Create questions table (references both user_details and score_history)
+CREATE TABLE questions (
+    q_id SERIAL PRIMARY KEY,
+    q_user_id INTEGER NOT NULL,
+    question TEXT,
+    option_a VARCHAR(255),
+    option_b VARCHAR(255),
+    option_c VARCHAR(255),
+    option_d VARCHAR(255),
+    correct_ans VARCHAR(255),
+    explanation TEXT,
+    user_ans VARCHAR(255),
+    time_stamp TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    q_history_id INTEGER NOT NULL,
+    CONSTRAINT fk_question_user FOREIGN KEY (q_user_id)
+        REFERENCES user_details(id)
+        ON DELETE CASCADE,
+    CONSTRAINT fk_question_history FOREIGN KEY (q_history_id)
+        REFERENCES score_history(score_id)
+        ON DELETE CASCADE
+);
+
+-- Create indexes for foreign keys (recommended for performance)
+CREATE INDEX idx_score_history_user ON score_history(s_user_id);
+CREATE INDEX idx_questions_user ON questions(q_user_id);
+CREATE INDEX idx_questions_history ON questions(q_history_id);
