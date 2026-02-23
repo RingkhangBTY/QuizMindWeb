@@ -1,15 +1,32 @@
 package com.ringkhang.quizmindweb.service;
 
+import com.ringkhang.quizmindweb.DTO.Questions;
+import com.ringkhang.quizmindweb.DTO.Result;
+import com.ringkhang.quizmindweb.DTO.ScoreHistoryDisplay;
+import com.ringkhang.quizmindweb.DTO.TestReviewDTO;
 import com.ringkhang.quizmindweb.model.*;
+import com.ringkhang.quizmindweb.repo.QuizRepo;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 
 @Service
 public class QuizService {
-    @Autowired
-    private UsersDetailsService userDetailsService;
+
+    private final UsersDetailsService userDetailsService;
+    private final ScoreHistoryService scoreHistoryService;
+    private final QuizRepo quizRepo;
+    private final MixedUtilService mixedUtilService;
+
+
+    public QuizService(UsersDetailsService userDetailsService, ScoreHistoryService scoreHistoryService, QuizRepo quizRepo, MixedUtilService mixedUtilService) {
+        this.userDetailsService = userDetailsService;
+        this.scoreHistoryService = scoreHistoryService;
+        this.quizRepo = quizRepo;
+        this.mixedUtilService = mixedUtilService;
+    }
 
     public Result calculateResult(List<Questions> questions) {
         int totalQuestions = questions.size();
@@ -45,7 +62,9 @@ public class QuizService {
         return result;
     }
 
-    public QuestionsTable getQustionsTableEntity(Questions question, ScoreHistoryTable scoreHistoryTable) {
+
+    //
+    public QuestionsTable getQuestionsTableEntity(Questions question, ScoreHistoryTable scoreHistoryTable) {
 
         QuestionsTable questionsTables = new QuestionsTable();
 
@@ -61,5 +80,24 @@ public class QuizService {
         questionsTables.setScoreHistory(scoreHistoryTable);
 
         return questionsTables;
+    }
+
+    // calculates test result and save test result and questions to DB and return an object containing score and review data
+    public ResponseEntity<TestReviewDTO> submitTest(List<Questions> questions, UserInput userInput) {
+
+        //find test score
+        Result result = calculateResult(questions);
+        //save score-history table
+        ScoreHistoryTable scoreHistoryTable = scoreHistoryService.saveHistory(
+                questions,result,userInput);
+
+        //save questions
+        for (Questions question : questions) {
+           QuestionsTable questionsTables = getQuestionsTableEntity(question, scoreHistoryTable);
+            quizRepo.save(questionsTables);
+        }
+
+        //return
+        return mixedUtilService.getTestReviewDetails(scoreHistoryTable.getScoreId());
     }
 }

@@ -1,4 +1,4 @@
-package com.ringkhang.quizmindweb.model;
+package com.ringkhang.quizmindweb.DTO;
 
 import lombok.*;
 

@@ -1,25 +1,35 @@
 package com.ringkhang.quizmindweb.service;
 
+import com.ringkhang.quizmindweb.DTO.Questions;
+import com.ringkhang.quizmindweb.DTO.QuizDetails;
+import com.ringkhang.quizmindweb.DTO.Result;
+import com.ringkhang.quizmindweb.DTO.ScoreHistoryDisplay;
 import com.ringkhang.quizmindweb.model.*;
 import com.ringkhang.quizmindweb.repo.QuizRepo;
 import com.ringkhang.quizmindweb.repo.ScoreHistoryRepo;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 
 @Service
 public class ScoreHistoryService {
-    @Autowired
-    private ScoreHistoryRepo historyRepo;
-    @Autowired
-    private UsersDetailsService usersDetailsService;
-    @Autowired
-    private QuizRepo quizRepo;
 
+    private final ScoreHistoryRepo historyRepo;
+    private final UsersDetailsService usersDetailsService;
+    private final QuizRepo quizRepo;
+
+    public ScoreHistoryService(ScoreHistoryRepo historyRepo, UsersDetailsService usersDetailsService, QuizRepo quizRepo) {
+        this.historyRepo = historyRepo;
+        this.usersDetailsService = usersDetailsService;
+        this.quizRepo = quizRepo;
+    }
+
+    //Save submitted test details with score etc
     public ScoreHistoryTable saveHistory(List<Questions> questions , Result result, UserInput userInput) {
 
         ScoreHistoryTable scoreHistoryTable = new ScoreHistoryTable();
@@ -51,13 +61,37 @@ public class ScoreHistoryService {
             String shortDes = sh.getShort_des(); // Placeholder, set appropriately if available
             LocalDateTime timeStamp = sh.getTime_stamp();
 
-            historyDisplayList.add(new ScoreHistoryDisplay(username, totalQuestion, correctAns, testScore, feedback,topicSub,level,shortDes,timeStamp));
+            historyDisplayList.add(new ScoreHistoryDisplay(
+                    sh.getScoreId(),username, totalQuestion, correctAns, testScore, feedback,topicSub,level,shortDes,timeStamp
+            ));
         }
         return historyDisplayList;
     }
 
-    public List<QuizDetails> getQuizDetailsById(int scoreHistoryId) {
-        return quizRepo.getQuestionsDetails(scoreHistoryId);
+    //Return quiz details for a re-test
+    public ResponseEntity<List<QuizDetails>> getQuizDetailsById(int scoreHistoryId) {
+        List<QuestionsTable> questionsList = quizRepo.findByHistoryId(scoreHistoryId);
+
+        if (questionsList.isEmpty()){
+            return ResponseEntity.status(HttpStatus.NO_CONTENT)
+                    .build();
+        }
+
+        // Map QuestionsTable to QuizDetails
+        List<QuizDetails> quizDetails = questionsList.stream()
+                .map(qt -> new QuizDetails(
+                        qt.getQuestion(),
+                        qt.getOption_a(),
+                        qt.getOption_b(),
+                        qt.getOption_c(),
+                        qt.getOption_d(),
+                        qt.getCorrect_ans(),
+                        qt.getExplanation()
+                ))
+                .toList();
+
+        return ResponseEntity.status(HttpStatus.OK)
+                .body(quizDetails);
     }
 
 
@@ -82,7 +116,7 @@ public class ScoreHistoryService {
                 .max((sh1, sh2) -> sh1.getTime_stamp().compareTo(sh2.getTime_stamp()))
                 .orElseThrow(() -> new IllegalStateException("No quiz history found"));
 
-        return latest.getScore_id();
+        return latest.getScoreId();
     }
 
     // Get score history ID by index (0 = most recent, 1 = second most recent, etc.)
@@ -95,6 +129,23 @@ public class ScoreHistoryService {
         // Sort by timestamp in descending order (most recent first)
         scoreHistories.sort((sh1, sh2) -> sh2.getTime_stamp().compareTo(sh1.getTime_stamp()));
 
-        return scoreHistories.get(index).getScore_id();
+        return scoreHistories.get(index).getScoreId();
+    }
+
+    public ScoreHistoryDisplay getTestScoreHistoryByHisId(int id){
+        ScoreHistoryTable scoreHistoryTable = historyRepo.getScoreHistoryTableByHisId(id);
+        ScoreHistoryDisplay scoreHistoryDisplay = new ScoreHistoryDisplay(
+                scoreHistoryTable.getScoreId(),
+                scoreHistoryTable.getUserDetails().getUsername(),
+                scoreHistoryTable.getTotal_question(),
+                scoreHistoryTable.getCorrect_ans(),
+                scoreHistoryTable.getTest_score(),
+                scoreHistoryTable.getFeedback(),
+                scoreHistoryTable.getTopic_sub(),
+                scoreHistoryTable.getLevel(),
+                scoreHistoryTable.getShort_des(),
+                scoreHistoryTable.getTime_stamp()
+        );
+        return scoreHistoryDisplay;
     }
 }

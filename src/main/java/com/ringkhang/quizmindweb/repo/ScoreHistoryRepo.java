@@ -1,6 +1,6 @@
 package com.ringkhang.quizmindweb.repo;
 
-import com.ringkhang.quizmindweb.model.QuizDetails;
+import com.ringkhang.quizmindweb.DTO.QuizDetails;
 import com.ringkhang.quizmindweb.model.ScoreHistoryTable;
 import jakarta.transaction.Transactional;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -43,4 +43,9 @@ public interface ScoreHistoryRepo extends JpaRepository<ScoreHistoryTable,Intege
                     WHERE sh.time_stamp = :timestamp
             """, nativeQuery = true)
     List<QuizDetails> getQuizDetailsByTimestamp(@Param("timestamp") LocalDateTime timestamp);
+
+    //gives history details by hisId
+    @Query(value = "SELECT sh FROM ScoreHistoryTable sh where sh.scoreId = :hisId")
+    ScoreHistoryTable getScoreHistoryTableByHisId(@Param("hisId") int hisId);
+
 }

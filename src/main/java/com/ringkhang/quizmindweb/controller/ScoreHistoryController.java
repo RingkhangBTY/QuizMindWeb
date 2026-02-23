@@ -1,29 +1,44 @@
 package com.ringkhang.quizmindweb.controller;
 
-import com.ringkhang.quizmindweb.model.QuizDetails;
-import com.ringkhang.quizmindweb.model.ScoreHistoryDisplay;
+import com.ringkhang.quizmindweb.DTO.QuizDetails;
+import com.ringkhang.quizmindweb.DTO.ScoreHistoryDisplay;
+import com.ringkhang.quizmindweb.DTO.TestReviewDTO;
+import com.ringkhang.quizmindweb.service.MixedUtilService;
 import com.ringkhang.quizmindweb.service.ScoreHistoryService;
 import com.ringkhang.quizmindweb.service.UsersDetailsService;
-import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
 @RestController
+@RequestMapping("/history")
 public class ScoreHistoryController {
 
-    @Autowired
-    private ScoreHistoryService service;
-    @Autowired
-    private UsersDetailsService usersDetailsService;
+    private final ScoreHistoryService scoreHistoryService;
+    private final UsersDetailsService usersDetailsService;
+    private final MixedUtilService mixedUtilService;
 
-    @GetMapping("/scoreHistory")
-    public List<ScoreHistoryDisplay> getCurrentUserHistory(){
-        return service.getScoreHistoriesByUserId(usersDetailsService.getCurrentUserId());
+    public ScoreHistoryController(ScoreHistoryService scoreHistoryService,
+                                  UsersDetailsService usersDetailsService,
+                                  MixedUtilService mixedUtilService) {
+        this.scoreHistoryService = scoreHistoryService;
+        this.usersDetailsService = usersDetailsService;
+        this.mixedUtilService = mixedUtilService;
     }
 
-    @PostMapping("testAgain")
-    public List<QuizDetails> testAgain(@RequestBody ScoreHistoryDisplay scoreHistoryDisplay){
-        return service.getQuestionsByTimestamp(scoreHistoryDisplay.getTime_stamp());
+    @GetMapping("/scoreHistory")
+    public List<ScoreHistoryDisplay> getCurrentUserHistory() {
+        return scoreHistoryService.getScoreHistoriesByUserId(usersDetailsService.getCurrentUserId());
+    }
+
+    @GetMapping("/testAgain")
+    public ResponseEntity<List<QuizDetails>> testAgain(@RequestParam int scoreHistoryId) {
+        return scoreHistoryService.getQuizDetailsById(scoreHistoryId);
+    }
+
+    @GetMapping("/review_test")
+    public ResponseEntity<TestReviewDTO> reviewTestResults(@RequestParam int testHisId) {
+        return mixedUtilService.getTestReviewDetails(testHisId);
     }
 }

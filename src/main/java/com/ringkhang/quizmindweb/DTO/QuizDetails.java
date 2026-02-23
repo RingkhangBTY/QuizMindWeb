@@ -1,4 +1,4 @@
-package com.ringkhang.quizmindweb.model;
+package com.ringkhang.quizmindweb.DTO;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -19,5 +19,6 @@ public class QuizDetails {
     private String optionD;
     private String answer;
     private String explanation;
-//    private String user_ans;
+
+    //    private String user_ans;
 }

@@ -7,6 +7,7 @@ import org.springframework.context.annotation.Configuration;
 
 @Configuration
 public class GeminiConfig {
+
     @Bean
     public Client geminiClient() {
         Dotenv dotenv = Dotenv.configure().ignoreIfMissing().load();

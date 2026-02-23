@@ -7,15 +7,15 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.time.LocalDateTime;
-import java.util.HashSet;
-import java.util.Set;
 
 @Entity @Table(name = "score_history")
 @Getter @Setter @NoArgsConstructor @AllArgsConstructor
 public class ScoreHistoryTable {
 
-    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int score_id;
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "score_id")  // maps to DB column
+    private int scoreId;           // <-- Java property in camelCase
 
     //🔹 Foreign Key -> user_details(id)
     @ManyToOne
@@ -25,7 +25,6 @@ public class ScoreHistoryTable {
     private int total_question;
     private int correct_ans;
     private int test_score;
-//    private String feedback;
 
     @Column(name = "time_stamp",nullable = false,updatable = false)
     @org.hibernate.annotations.CreationTimestamp

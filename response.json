@@ -1,47 +1,47 @@
 [
     {
-      "question": "What happens if a private method in a superclass has a method with the exact same signature in its subclass?",
-      "optionA": "A compile-time error occurs because private methods cannot be overridden.",
-      "optionB": "The subclass method will be called via polymorphism if accessed through a superclass reference.",
-      "optionC": "The subclass method is a new, unrelated method specific to the subclass, not an override.",
-      "optionD": "A runtime error (NoSuchMethodError) will be thrown when attempting to invoke it polymorphically.",
-      "answer": "The subclass method is a new, unrelated method specific to the subclass, not an override.",
-      "explanation": "Private methods are not inherited by subclasses. Therefore, a method in a subclass with the same signature as a private method in its superclass is considered a completely new and independent method for the subclass, not an override. Overriding applies only to inherited methods."
+      "question": "What is the primary mechanism in Java OOP for bundling data (variables) and methods (functions) that operate on the data into a single unit, and restricting direct access to some of an object's components?",
+      "optionA": "Polymorphism",
+      "optionB": "Encapsulation",
+      "optionC": "Inheritance",
+      "optionD": "Abstraction",
+      "answer": "Encapsulation",
+      "explanation": "Encapsulation is the OOP principle of bundling the data (attributes) and methods (behaviors) that operate on the data into a single unit (a class), and hiding the internal state of the object from the outside world, usually by making fields private and providing public methods (getters/setters) for controlled access."
     },
     {
-      "question": "Which access modifier allows members to be accessed from anywhere within the same package and also by subclasses, even if those subclasses are in a different package?",
-      "optionA": "private",
-      "optionB": "No modifier (default/package-private)",
-      "optionC": "protected",
-      "optionD": "public",
-      "answer": "protected",
-      "explanation": "The `protected` access modifier grants access to members within the same package and to all subclasses, regardless of their package location. `public` allows access from everywhere. Default (no modifier) allows access only within the same package. `private` restricts access to only within the declaring class."
+      "question": "Which of the following keywords is used in Java to allow a class to acquire the properties and behaviors of another class, promoting code reusability?",
+      "optionA": "implements",
+      "optionB": "uses",
+      "optionC": "inherits",
+      "optionD": "extends",
+      "answer": "extends",
+      "explanation": "The `extends` keyword in Java is specifically used to define an inheritance relationship, where a subclass inherits from a superclass, thereby reusing its methods and fields."
     },
     {
-      "question": "Consider the following Java code snippet:\n```java\ntry {\n    System.out.print(\"A\");\n    throw new NullPointerException();\n} catch (ArithmeticException e) {\n    System.out.print(\"B\");\n} catch (RuntimeException e) {\n    System.out.print(\"C\");\n} finally {\n    System.out.print(\"D\");\n}\nSystem.out.print(\"E\");\n```\nWhat will be the output?",
-      "optionA": "ACDE",
-      "optionB": "ABDE",
-      "optionC": "ADE",
-      "optionD": "ACD",
-      "answer": "ACDE",
-      "explanation": "The code first prints 'A'. Then, a `NullPointerException` is thrown. This exception is a subclass of `RuntimeException`, so it will be caught by the `catch (RuntimeException e)` block, printing 'C'. The `finally` block always executes, printing 'D'. Finally, the statement after the `try-catch-finally` block executes, printing 'E'. Thus, the sequence is ACDE."
+      "question": "In Java, having two or more methods in the same class with the same name but different argument lists (number, type, or order of parameters) is an example of what OOP concept?",
+      "optionA": "Method Overriding",
+      "optionB": "Data Hiding",
+      "optionC": "Method Overloading",
+      "optionD": "Abstraction",
+      "answer": "Method Overloading",
+      "explanation": "Method Overloading is a form of compile-time polymorphism where multiple methods in the same class have the same name but distinct parameter lists. Method Overriding involves a subclass providing a specific implementation for a method already defined in its superclass."
     },
     {
-      "question": "Which statement best describes a key difference between Java interfaces and abstract classes regarding class implementation and inheritance?",
-      "optionA": "A class can extend multiple abstract classes but can only implement one interface.",
-      "optionB": "An interface can declare instance variables, while an abstract class cannot.",
-      "optionC": "A class can implement multiple interfaces but can only extend one abstract class.",
-      "optionD": "Abstract classes support true multiple inheritance of implementation, unlike interfaces.",
-      "answer": "A class can implement multiple interfaces but can only extend one abstract class.",
-      "explanation": "Java supports multiple inheritance of type (through interfaces) but not multiple inheritance of implementation (a class can only extend one superclass, whether concrete or abstract). Interfaces by definition only provide method signatures (and default/static/private methods in Java 8+), while abstract classes can have concrete methods and state. This rule ensures avoiding the 'diamond problem' of multiple implementation inheritance."
+      "question": "What is the main purpose of an abstract class in Java?",
+      "optionA": "To create objects directly from it.",
+      "optionB": "To define a common interface for a group of related classes, potentially with some default implementations, but not allowing direct instantiation.",
+      "optionC": "To prevent any other class from extending it.",
+      "optionD": "To force all its methods to be declared as `static`.",
+      "answer": "To define a common interface for a group of related classes, potentially with some default implementations, but not allowing direct instantiation.",
+      "explanation": "An abstract class serves as a blueprint for other classes. It can have both abstract (unimplemented) and concrete (implemented) methods. Its primary purpose is to provide a common structure and partial implementation that subclasses must complete, and it cannot be instantiated directly."
     },
     {
-      "question": "Given the following Java code:\n```java\nString s1 = \"Hello\";\nString s2 = s1.concat(\" World\");\nString s3 = s1;\ns1 = s1.toUpperCase();\nSystem.out.println(s1 + \", \" + s2 + \", \" + s3);\n```\nWhat will be the output?",
-      "optionA": "HELLO, Hello World, HELLO",
-      "optionB": "HELLO, HELLO World, HELLO",
-      "optionC": "HELLO, Hello World, Hello",
-      "optionD": "Hello, Hello World, Hello",
-      "answer": "HELLO, Hello World, Hello",
-      "explanation": "Strings in Java are immutable. \n1. `s1` points to \"Hello\".\n2. `s2` points to a *new* String \"Hello World\" (s1's value is used, but s1 itself doesn't change).\n3. `s3` points to the *same* String object as `s1` (which is still \"Hello\").\n4. `s1 = s1.toUpperCase();` creates a *new* String object \"HELLO\" and `s1` now refers to this new object. The original \"Hello\" object remains unchanged, and `s3` still points to it.\nTherefore, the output will reflect the current values of `s1` (\"HELLO\"), `s2` (\"Hello World\"), and `s3` (\"Hello\")."
+      "question": "Consider a `Car` class. When we create `Car myCar = new Car();`, what does `myCar` represent in terms of OOP principles?",
+      "optionA": "A blueprint for creating vehicles.",
+      "optionB": "An interface that defines car behavior.",
+      "optionC": "An instance of the `Car` class, also known as an object.",
+      "optionD": "A static utility method.",
+      "answer": "An instance of the `Car` class, also known as an object.",
+      "explanation": "A class (`Car`) is a blueprint, and an object (`myCar`) is a concrete instance created from that blueprint. So, `myCar` is an object of the `Car` class."
     }
   ]
