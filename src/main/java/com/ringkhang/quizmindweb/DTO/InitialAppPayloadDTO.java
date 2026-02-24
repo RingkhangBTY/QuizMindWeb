@@ -1,7 +1,5 @@
 package com.ringkhang.quizmindweb.DTO;
 
-
-
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
