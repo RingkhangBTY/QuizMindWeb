@@ -1,47 +1,20 @@
 [
     {
-      "question": "What is the primary mechanism in Java OOP for bundling data (variables) and methods (functions) that operate on the data into a single unit, and restricting direct access to some of an object's components?",
-      "optionA": "Polymorphism",
-      "optionB": "Encapsulation",
-      "optionC": "Inheritance",
-      "optionD": "Abstraction",
-      "answer": "Encapsulation",
-      "explanation": "Encapsulation is the OOP principle of bundling the data (attributes) and methods (behaviors) that operate on the data into a single unit (a class), and hiding the internal state of the object from the outside world, usually by making fields private and providing public methods (getters/setters) for controlled access."
+      "question": "Consider the following Python code snippet:\n\n```python\nt = (1, [2, 3], 4)\nt[1][0] = 99\nprint(t)\n```\n\nWhat will be the output when this code is executed?",
+      "optionA": "(1, [2, 3], 4)",
+      "optionB": "(1, [99, 3], 4)",
+      "optionC": "TypeError: 'tuple' object does not support item assignment",
+      "optionD": "(1, 99, 4)",
+      "answer": "(1, [99, 3], 4)",
+      "explanation": "Tuples are immutable, meaning you cannot change which objects they refer to directly (e.g., `t[0] = 5` would raise a TypeError). However, if a tuple contains a mutable object (like a list in this case), the mutable object itself can be modified. Here, `t[1]` refers to the list `[2, 3]`, and `t[1][0] = 99` modifies an element within that list, which is a valid operation. The tuple `t` still refers to the same list object, but the internal state of that list object has changed."
     },
     {
-      "question": "Which of the following keywords is used in Java to allow a class to acquire the properties and behaviors of another class, promoting code reusability?",
-      "optionA": "implements",
-      "optionB": "uses",
-      "optionC": "inherits",
-      "optionD": "extends",
-      "answer": "extends",
-      "explanation": "The `extends` keyword in Java is specifically used to define an inheritance relationship, where a subclass inherits from a superclass, thereby reusing its methods and fields."
-    },
-    {
-      "question": "In Java, having two or more methods in the same class with the same name but different argument lists (number, type, or order of parameters) is an example of what OOP concept?",
-      "optionA": "Method Overriding",
-      "optionB": "Data Hiding",
-      "optionC": "Method Overloading",
-      "optionD": "Abstraction",
-      "answer": "Method Overloading",
-      "explanation": "Method Overloading is a form of compile-time polymorphism where multiple methods in the same class have the same name but distinct parameter lists. Method Overriding involves a subclass providing a specific implementation for a method already defined in its superclass."
-    },
-    {
-      "question": "What is the main purpose of an abstract class in Java?",
-      "optionA": "To create objects directly from it.",
-      "optionB": "To define a common interface for a group of related classes, potentially with some default implementations, but not allowing direct instantiation.",
-      "optionC": "To prevent any other class from extending it.",
-      "optionD": "To force all its methods to be declared as `static`.",
-      "answer": "To define a common interface for a group of related classes, potentially with some default implementations, but not allowing direct instantiation.",
-      "explanation": "An abstract class serves as a blueprint for other classes. It can have both abstract (unimplemented) and concrete (implemented) methods. Its primary purpose is to provide a common structure and partial implementation that subclasses must complete, and it cannot be instantiated directly."
-    },
-    {
-      "question": "Consider a `Car` class. When we create `Car myCar = new Car();`, what does `myCar` represent in terms of OOP principles?",
-      "optionA": "A blueprint for creating vehicles.",
-      "optionB": "An interface that defines car behavior.",
-      "optionC": "An instance of the `Car` class, also known as an object.",
-      "optionD": "A static utility method.",
-      "answer": "An instance of the `Car` class, also known as an object.",
-      "explanation": "A class (`Car`) is a blueprint, and an object (`myCar`) is a concrete instance created from that blueprint. So, `myCar` is an object of the `Car` class."
+      "question": "Analyze the following Python code:\n\n```python\ndef count_up_to(limit):\n    n = 0\n    while n < limit:\n        yield n\n        n += 1\n\ngen_one = count_up_to(2)\nfirst_values = [x for x in gen_one]\ngen_two = count_up_to(2)\nsecond_values = [x for x in gen_one]\n\nprint(f\"First: {first_values}, Second: {second_values}\")\n```\n\nWhat will be the output of this program?",
+      "optionA": "First: [0, 1], Second: [0, 1]",
+      "optionB": "First: [0, 1], Second: []",
+      "optionC": "First: [], Second: [0, 1]",
+      "optionD": "TypeError: 'generator' object is not subscriptable",
+      "answer": "First: [0, 1], Second: []",
+      "explanation": "The `count_up_to` function is a generator. When `gen_one = count_up_to(2)` is called, it creates a generator object. The list comprehension `[x for x in gen_one]` iterates through `gen_one`, consuming its values (0 and 1) until it's exhausted. Once a generator is exhausted, it cannot produce more values unless a new generator object is created. Although `gen_two = count_up_to(2)` creates a *new* generator, `second_values` attempts to iterate over the *already exhausted* `gen_one` again, thus resulting in an empty list. So, `first_values` will be `[0, 1]` and `second_values` will be `[]`."
     }
   ]

@@ -10,6 +10,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 @RestController
 @RequestMapping("/history")
@@ -29,16 +31,25 @@ public class ScoreHistoryController {
 
     @GetMapping("/scoreHistory")
     public List<ScoreHistoryDisplay> getCurrentUserHistory() {
+        Logger.getLogger(ScoreHistoryDisplay.class.getName())
+                .log(Level.INFO, "Requested test score history data...");
+
         return scoreHistoryService.getScoreHistoriesByUserId(usersDetailsService.getCurrentUserId());
     }
 
     @GetMapping("/testAgain")
     public ResponseEntity<List<QuizDetails>> testAgain(@RequestParam int scoreHistoryId) {
+        Logger.getLogger(ScoreHistoryDisplay.class.getName())
+                .log(Level.INFO, "Requested for re-test...");
+
         return scoreHistoryService.getQuizDetailsById(scoreHistoryId);
     }
 
     @GetMapping("/review_test")
     public ResponseEntity<TestReviewDTO> reviewTestResults(@RequestParam int testHisId) {
+        Logger.getLogger(ScoreHistoryDisplay.class.getName())
+                .log(Level.INFO, "Requested for test review...");
+
         return mixedUtilService.getTestReviewDetails(testHisId);
     }
 }

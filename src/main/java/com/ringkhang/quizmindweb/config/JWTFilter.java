@@ -2,6 +2,9 @@ package com.ringkhang.quizmindweb.config;
 
 import com.ringkhang.quizmindweb.service.JWTTokenService;
 import com.ringkhang.quizmindweb.service.MyUserDetailsService;
+import io.jsonwebtoken.ExpiredJwtException;
+import io.jsonwebtoken.MalformedJwtException;
+import io.jsonwebtoken.security.SignatureException;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -36,7 +39,31 @@ public class JWTFilter extends OncePerRequestFilter {
 
         if (authHeader != null && authHeader.startsWith("Bearer ")) {
             token = authHeader.substring(7);
-            username = jwtService.extractUserName(token);
+
+            try {
+                username = jwtService.extractUserName(token);
+
+            } catch (ExpiredJwtException e) {
+                // Token expired → return clean 401 so Android can handle it
+                response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+                response.setContentType("application/json");
+                response.getWriter().write("{\"error\": \"Token expired\"}");
+                return; // stop filter chain — don't proceed to controller
+
+            } catch (MalformedJwtException | SignatureException e) {
+                // Token is invalid / tampered
+                response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+                response.setContentType("application/json");
+                response.getWriter().write("{\"error\": \"Invalid token\"}");
+                return;
+
+            } catch (Exception e) {
+                // Any other token error
+                response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+                response.setContentType("application/json");
+                response.getWriter().write("{\"error\": \"Token error\"}");
+                return;
+            }
         }
 
         if (username != null && SecurityContextHolder.getContext().getAuthentication() == null) {
@@ -57,8 +84,7 @@ public class JWTFilter extends OncePerRequestFilter {
                                 .buildDetails(request)
                 );
 
-                SecurityContextHolder.getContext()
-                        .setAuthentication(authToken);
+                SecurityContextHolder.getContext().setAuthentication(authToken);
             }
         }
 

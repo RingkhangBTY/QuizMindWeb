@@ -34,15 +34,18 @@ public class UsersDetailsService {
         this.scoreHistoryRepo = scoreHistoryRepo;
     }
 
-    public void register(UserDetailsTable user) {
+    public ResponseEntity<String> register(UserDetailsTable user) {
 
         BCryptPasswordEncoder encoder = new BCryptPasswordEncoder(12);
 
         if (isUsernameFree(user.getUsername())){
             user.setPass(encoder.encode(user.getPass()));
             repo.save(user);
+            return ResponseEntity.status(HttpStatus.CREATED)
+                    .body("User registered successfully");
         }else {
-            System.out.println("User already exist!");
+            return ResponseEntity.status(HttpStatus.CONFLICT)
+                    .body("User already exist!");
         }
     }
 
@@ -80,31 +83,47 @@ public class UsersDetailsService {
         UserDetailsTable userDetailsTable = getCurrentUserDetails();
         List<ScoreHistoryTable> scoreHistoryTable = scoreHistoryRepo.getScoreHistoriesByUserId(userDetailsTable.getId());
 
-        InitialAppPayloadDTO initialAppPayloadDTO = new InitialAppPayloadDTO(
-                new UserDetailsDTO(
-                        userDetailsTable.getId(),
-                        userDetailsTable.getUsername(),
-                        userDetailsTable.getEmail()
-                ),
-                new ScoreHistoryDisplay(
-                        scoreHistoryTable.getLast().getScoreId(),
-                        userDetailsTable.getUsername(),
-                        scoreHistoryTable.getLast().getTotal_question(),
-                        scoreHistoryTable.getLast().getCorrect_ans(),
-                        scoreHistoryTable.getLast().getTest_score(),
-                        scoreHistoryTable.getLast().getFeedback(),
-                        scoreHistoryTable.getLast().getTopic_sub(),
-                        scoreHistoryTable.getLast().getLevel(),
-                        scoreHistoryTable.getLast().getShort_des(),
-                        scoreHistoryTable.getLast().getTime_stamp()
-                ),
-                scoreHistoryTable.size(),
-                getAvgScore(scoreHistoryTable),
-                getEasyQuizCount(scoreHistoryTable),
-                getMediumQuizCount(scoreHistoryTable),
-                getHardQuizCount(scoreHistoryTable),
-                getHardPlusQuizCount(scoreHistoryTable)
-        );
+        InitialAppPayloadDTO initialAppPayloadDTO = new InitialAppPayloadDTO();
+
+        if (scoreHistoryTable.isEmpty()){
+            initialAppPayloadDTO.setUserDetailsDTO(
+                    new UserDetailsDTO(
+                            userDetailsTable.getId(),
+                            userDetailsTable.getUsername(),
+                            userDetailsTable.getEmail()
+                    )
+            );
+
+            initialAppPayloadDTO.setScoreHistoryDisplay(
+                    new ScoreHistoryDisplay()
+            );
+        }else {
+            initialAppPayloadDTO = new InitialAppPayloadDTO(
+                    new UserDetailsDTO(
+                            userDetailsTable.getId(),
+                            userDetailsTable.getUsername(),
+                            userDetailsTable.getEmail()
+                    ),
+                    new ScoreHistoryDisplay(
+                            scoreHistoryTable.getLast().getScoreId(),
+                            userDetailsTable.getUsername(),
+                            scoreHistoryTable.getLast().getTotal_question(),
+                            scoreHistoryTable.getLast().getCorrect_ans(),
+                            scoreHistoryTable.getLast().getTest_score(),
+                            scoreHistoryTable.getLast().getFeedback(),
+                            scoreHistoryTable.getLast().getTopic_sub(),
+                            scoreHistoryTable.getLast().getLevel(),
+                            scoreHistoryTable.getLast().getShort_des(),
+                            scoreHistoryTable.getLast().getTime_stamp()
+                    ),
+                    scoreHistoryTable.size(),
+                    getAvgScore(scoreHistoryTable),
+                    getEasyQuizCount(scoreHistoryTable),
+                    getMediumQuizCount(scoreHistoryTable),
+                    getHardQuizCount(scoreHistoryTable),
+                    getHardPlusQuizCount(scoreHistoryTable)
+            );
+        }
 
         return ResponseEntity.status(HttpStatus.OK)
                 .body(initialAppPayloadDTO);

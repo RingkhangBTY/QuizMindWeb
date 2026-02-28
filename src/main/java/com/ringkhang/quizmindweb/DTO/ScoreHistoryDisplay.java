@@ -23,7 +23,4 @@ public class ScoreHistoryDisplay {
     private  String level;
     private  String short_des;
     private LocalDateTime time_stamp;
-
-//    public ScoreHistoryDisplay(String username, int correctAns, int testScore, String feedback, Timestamp timeStamp) {
-//    }
 }

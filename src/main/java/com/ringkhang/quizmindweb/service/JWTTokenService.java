@@ -31,7 +31,7 @@ public class JWTTokenService {
                 .add(claims)
                 .setSubject(username)
                 .setIssuedAt(new Date(System.currentTimeMillis()))
-                .setExpiration(new Date(System.currentTimeMillis()+1000*60*60)) // 60 mins
+                .setExpiration(new Date(System.currentTimeMillis()+ 1000L * 60 * 60 * 24 )) // 1 days
                 .and()
                 .signWith(getKey())
                 .compact();
