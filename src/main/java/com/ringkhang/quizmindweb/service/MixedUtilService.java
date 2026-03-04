@@ -28,30 +28,64 @@ public class MixedUtilService {
         this.scoreHistoryService = scoreHistoryService;
     }
 
+//    public ResponseEntity<TestReviewDTO> getTestReviewDetails(int testHisId) {
+//        ScoreHistoryDisplay scoreHistoryDisplay = scoreHistoryService.getTestScoreHistoryByHisId(testHisId);
+//        List<QuestionsTable> questionsTables = quizRepo.findByHistoryId(testHisId);
+//
+//        List<Questions> questionsList = new ArrayList<>();
+//        for (QuestionsTable qt : questionsTables){
+//            questionsList.add(new Questions(
+//                  qt.getQuestion(),
+//                  qt.getOption_a(),
+//                  qt.getOption_b(),
+//                  qt.getOption_c(),
+//                  qt.getOption_d(),
+//                  qt.getCorrect_ans(),
+//                  qt.getExplanation(),
+//                  qt.getUser_ans()
+//            ));
+//        }
+//
+//        TestReviewDTO testReviewDTO = new TestReviewDTO(
+//                scoreHistoryDisplay,questionsList
+//
+//        );
+//
+//        return ResponseEntity.status(HttpStatus.OK)
+//                .body(testReviewDTO);
+//    }
+
     public ResponseEntity<TestReviewDTO> getTestReviewDetails(int testHisId) {
         ScoreHistoryDisplay scoreHistoryDisplay = scoreHistoryService.getTestScoreHistoryByHisId(testHisId);
         List<QuestionsTable> questionsTables = quizRepo.findByHistoryId(testHisId);
 
         List<Questions> questionsList = new ArrayList<>();
         for (QuestionsTable qt : questionsTables){
+            //Handle null user_ans before creating Questions object
+            String userAnswer = qt.getUser_ans();
+            if (userAnswer == null || userAnswer.trim().isEmpty()) {
+                userAnswer = "Not Answered";
+            }
+
             questionsList.add(new Questions(
-                  qt.getQuestion(),
-                  qt.getOption_a(),
-                  qt.getOption_b(),
-                  qt.getOption_c(),
-                  qt.getOption_d(),
-                  qt.getCorrect_ans(),
-                  qt.getExplanation(),
-                  qt.getUser_ans()
+                    qt.getQuestion(),
+                    qt.getOption_a(),
+                    qt.getOption_b(),
+                    qt.getOption_c(),
+                    qt.getOption_d(),
+                    qt.getCorrect_ans(),
+                    qt.getExplanation(),
+                    userAnswer  //Use the handled value instead of qt.getUser_ans()
             ));
         }
 
         TestReviewDTO testReviewDTO = new TestReviewDTO(
-                scoreHistoryDisplay,questionsList
-
+                scoreHistoryDisplay,
+                questionsList
         );
 
         return ResponseEntity.status(HttpStatus.OK)
                 .body(testReviewDTO);
     }
+
 }

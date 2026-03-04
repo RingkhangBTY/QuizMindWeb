@@ -1,9 +1,6 @@
 package com.ringkhang.quizmindweb.service;
 
-import com.ringkhang.quizmindweb.DTO.Questions;
-import com.ringkhang.quizmindweb.DTO.Result;
-import com.ringkhang.quizmindweb.DTO.ScoreHistoryDisplay;
-import com.ringkhang.quizmindweb.DTO.TestReviewDTO;
+import com.ringkhang.quizmindweb.DTO.*;
 import com.ringkhang.quizmindweb.model.*;
 import com.ringkhang.quizmindweb.repo.QuizRepo;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -98,6 +95,30 @@ public class QuizService {
         }
 
         //return
+        return mixedUtilService.getTestReviewDetails(scoreHistoryTable.getScoreId());
+    }
+
+    // calculates re-test results and save test result and questions to DB and return an object containing score and review data
+    public ResponseEntity<TestReviewDTO> submitReTest(ReTestSubmitRequest request) {
+        ScoreHistoryDisplay scoreHistory = scoreHistoryService.getTestScoreHistoryByHisId(request.getHisId());
+        UserInput userInput = new UserInput(
+                scoreHistory.getTopic_sub(),
+                scoreHistory.getShort_des(),
+                scoreHistory.getLevel(),
+                scoreHistory.getTotal_question()
+        );
+
+        Result result = calculateResult(request.getQuestions());
+
+        ScoreHistoryTable scoreHistoryTable = scoreHistoryService.saveHistory(
+                request.getQuestions(),result,userInput);
+
+        //save questions
+        for (Questions question : request.getQuestions()) {
+            QuestionsTable questionsTables = getQuestionsTableEntity(question, scoreHistoryTable);
+            quizRepo.save(questionsTables);
+        }
+
         return mixedUtilService.getTestReviewDetails(scoreHistoryTable.getScoreId());
     }
 }

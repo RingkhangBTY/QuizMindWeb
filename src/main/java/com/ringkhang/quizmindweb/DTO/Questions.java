@@ -20,8 +20,17 @@ public class Questions {
     private String explanation;
     private String userAnswer; // User's selected answer
 
-    // Method to check if user answered correctly
-//    public boolean isCorrect() {
-//        return userAnswer != null && userAnswer.equals(answer);
-//    }
+    //Custom getter to ensure never null
+    public String getUserAnswer() {
+        return (userAnswer != null && !userAnswer.trim().isEmpty())
+                ? userAnswer
+                : "Not Answered";
+    }
+
+    //Custom setter to handle null
+    public void setUserAnswer(String user_ans) {
+        this.userAnswer = (user_ans != null && !user_ans.trim().isEmpty())
+                ? user_ans
+                : "Not Answered";
+    }
 }

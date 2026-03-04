@@ -63,6 +63,7 @@ public class UsersDetailsService {
     public UserDetailsTable getCurrentUserDetails() {
         return repo.findById(getCurrentUserId()).orElse(new UserDetailsTable());
     }
+
     //Varifies the current users login request and send back jwt token if varified
     public ResponseEntity<String> varify(String username, String pass) {
         Authentication authentication = authenticationManager.

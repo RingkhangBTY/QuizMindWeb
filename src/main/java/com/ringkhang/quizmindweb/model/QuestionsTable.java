@@ -40,6 +40,12 @@ public class QuestionsTable {
     @JoinColumn(name = "q_history_id", nullable = false)  // FK -> score_history(score_id)
     private ScoreHistoryTable scoreHistory; // Foreign key references score_history tables id
 
+    public String getUser_ans() {
+        return (user_ans != null && !user_ans.trim().isEmpty())
+                ? user_ans
+                : "Not Answered";
+    }
+
     // Bidirectional ManyToMany back-reference to score history (optional)
 //    @JsonIgnore
 //    @ManyToOne(mappedBy = "questions", fetch = FetchType.LAZY)
